@@ -6,8 +6,35 @@ const Engineer = require('./lib/Engineer');
 const Intern = require('./lib/Intern');
 
 const information = [];
-const internQuestion = [
-    {
+const checkManager = () => {
+    for (let i = 0; i < information.length; i++) {
+         if (information[i].employeeType == 'Manager') {
+             return true;
+         }  
+    }
+    return false;
+}
+const addMore = () => {
+    return inquirer
+    .prompt (
+        {
+            type: 'confirm',
+            name: 'moreEmployee',
+            message: 'Add more team members?',
+            default: false
+        }
+    )
+    .then(data => {
+        if (data.moreEmployee === true) {
+            checkManager();
+        }
+    })
+}
+const internQuestion = () => {
+    console.log('Hi newbie');
+    return inquirer
+    .prompt(
+        {
         type:'input',
         name: 'school',
         message: 'What school does this person attend?',
@@ -18,10 +45,14 @@ const internQuestion = [
                 console.log('Enter the school name!');
             }
         }
-    }
-]
-const engineerQuestion = [
-    {
+        }
+    )
+}
+const engineerQuestion = ()=>  {
+    console.log('Hi coder');
+    return inquirer
+    .prompt(
+        {
         type:'input',
         name: 'github',
         message: "Input Engineer's github username",
@@ -32,10 +63,14 @@ const engineerQuestion = [
                 console.log('Enter the github username!');
             }
         }
-    }
-]
-const managerQuestion = [
-    {
+      }
+    )
+}
+const managerQuestion = ()=> {
+    console.log('Hi boss');
+    return inquirer
+    .prompt(
+        {
         type:'input',
         name: 'office',
         message: "Input office number",
@@ -47,8 +82,11 @@ const managerQuestion = [
             }
         }
     }
-]
-const inquireInfo = [
+  )
+}
+const inquireInfo = () => {
+    return inquirer
+    .prompt(
     {
         type: 'input',
         name: 'name',
@@ -85,49 +123,57 @@ const inquireInfo = [
             }
         }
     },
-    // {
-    //     type: 'confirm',
-    //     name: 'engineer',
-    //     message: "Is the employee a engineer?",
-    //     default: true
+    )
+};
 
-    // },
-    // {},
-    // {
-    //     type:'confirm',
-    //     name:'manager',
-    //     message: "Is the employee a manager?",
-    //     default: true
-    // },
-    // {},
-    // {
-    //     type:'confirm',
-    //     name: 'intern',
-    //     message: "Is the employee a intern?",
-    //     default: true
-    // },
-    // {},
-    {
-        type:'list',
-        name: 'employeeType',
-        message: 'What type of employee are they?',
-        choices: ['Engineer','Manager','Intern'],
-        validate: data => {
-            switch (data) {
-                case 'Engineer':
-                    return engineerQuestion;
-                case 'Manager':
-                    return managerQuestion;
-                case 'Intern':
-                    return internQuestion;
-            }
-        }
+const firstQuestions = function() {
+    inquireInfo();
+    typePrompt()
+}
+
+const typePrompt = function(manager) {
+    switch (manager) {
+        case true:
+            return inquirer
+            .prompt(
+                {
+                    type:'list',
+                    name: 'employeeType',
+                    message: 'What type of employee are they?',
+                    choices: ['Engineer','Intern'],
+                },
+            )
+        case false:
+            return inquirer
+            .prompt(
+                {
+                    type:'list',
+                    name: 'employeeType',
+                    message: 'What type of employee are they?',
+                    choices: ['Engineer','Manager','Intern'],
+                },
+            )
+        default:
+            break;
     }
-];
+} 
 
 const companyPrompt = () => {
-    return inquirer
-    .prompt(inquireInfo)
+    firstQuestions()
+    .then(data => {
+         switch (data.employeeType) {
+            case 'Engineer':
+            engineerQuestion();
+            break;
+            case 'Manager':
+            managerQuestion();
+            break;
+            case 'Intern':
+            internQuestion();
+            break;
+            }
+    })
+    .then ()
 }
 
 companyPrompt();
