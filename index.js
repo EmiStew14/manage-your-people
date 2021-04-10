@@ -1,11 +1,53 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
-// const Employee = require('./lib/Employee');
-// const Manager = require('./lib/Manager');
-// const Engineer = require('./lib/Engineer');
-// const Intern = require('./lib/Intern');
+const Employee = require('./lib/Employee');
+const Manager = require('./lib/Manager');
+const Engineer = require('./lib/Engineer');
+const Intern = require('./lib/Intern');
 
 const information = [];
+const internQuestion = [
+    {
+        type:'input',
+        name: 'school',
+        message: 'What school does this person attend?',
+        validate: schoolInput => {
+            if (schoolInput) {
+                return true;
+            } else {
+                console.log('Enter the school name!');
+            }
+        }
+    }
+]
+const engineerQuestion = [
+    {
+        type:'input',
+        name: 'github',
+        message: "Input Engineer's github username",
+        validate: githubInput => {
+            if (githubInput) {
+                return true;
+            } else {
+                console.log('Enter the github username!');
+            }
+        }
+    }
+]
+const managerQuestion = [
+    {
+        type:'input',
+        name: 'office',
+        message: "Input office number",
+        validate: officeInput => {
+            if (officeInput) {
+                return true;
+            } else {
+                console.log('Enter the office number!');
+            }
+        }
+    }
+]
 const inquireInfo = [
     {
         type: 'input',
@@ -43,21 +85,43 @@ const inquireInfo = [
             }
         }
     },
+    // {
+    //     type: 'confirm',
+    //     name: 'engineer',
+    //     message: "Is the employee a engineer?",
+    //     default: true
+
+    // },
+    // {},
+    // {
+    //     type:'confirm',
+    //     name:'manager',
+    //     message: "Is the employee a manager?",
+    //     default: true
+    // },
+    // {},
+    // {
+    //     type:'confirm',
+    //     name: 'intern',
+    //     message: "Is the employee a intern?",
+    //     default: true
+    // },
+    // {},
     {
-        type:'checkbox',
+        type:'list',
         name: 'employeeType',
         message: 'What type of employee are they?',
         choices: ['Engineer','Manager','Intern'],
-        // validate: value => {
-        //     switch (value) {
-        //         case 'Engineer':
-        //             return Engineer;
-        //         case 'Manager':
-        //             return Manager;
-        //         case 'Intern':
-        //             return Intern;
-        //     }
-        // }
+        validate: data => {
+            switch (data) {
+                case 'Engineer':
+                    return engineerQuestion;
+                case 'Manager':
+                    return managerQuestion;
+                case 'Intern':
+                    return internQuestion;
+            }
+        }
     }
 ];
 
