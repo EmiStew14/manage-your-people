@@ -1,5 +1,9 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
+// const Employee = require('./lib/Employee');
+// const Manager = require('./lib/Manager');
+// const Engineer = require('./lib/Engineer');
+// const Intern = require('./lib/Intern');
 
 const information = [];
 const inquireInfo = [
@@ -44,6 +48,22 @@ const inquireInfo = [
         name: 'employeeType',
         message: 'What type of employee are they?',
         choices: ['Engineer','Manager','Intern'],
+        // validate: value => {
+        //     switch (value) {
+        //         case 'Engineer':
+        //             return Engineer;
+        //         case 'Manager':
+        //             return Manager;
+        //         case 'Intern':
+        //             return Intern;
+        //     }
+        // }
     }
 ];
 
+const companyPrompt = () => {
+    return inquirer
+    .prompt(inquireInfo)
+}
+
+companyPrompt();
