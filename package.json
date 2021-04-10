@@ -1,0 +1,22 @@
+{
+  "name": "manage-your-people",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EmiStew14/manage-your-people.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EmiStew14/manage-your-people/issues"
+  },
+  "homepage": "https://github.com/EmiStew14/manage-your-people#readme"
+}
