@@ -69,7 +69,6 @@ const managerQuestion = () => {
     };
 
 const addMore = () => {
-  console.log("You want...more?");
   return inquirer
     .prompt({
       type: "confirm",
@@ -195,6 +194,7 @@ const inquireInfo = () => {
 .then(data => {
     information.push(data);
 })
+.then(addMore)
 };
 
 
