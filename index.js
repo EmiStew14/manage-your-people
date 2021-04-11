@@ -4,6 +4,7 @@ const Employee = require("./lib/Employee");
 const Manager = require("./lib/Manager");
 const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
+const template = require('./src/template');
 
 const information = [];
 
@@ -18,7 +19,7 @@ const managerQuestion = () => {
         },
         {
             type: "input",
-            name: "name",
+            name: "managerName",
             message: "What is the manager's name",
             validate: nameInput => {
                 if (nameInput) {
@@ -30,7 +31,7 @@ const managerQuestion = () => {
           },
           {
             type: "input",
-            name: "id",
+            name: "managerId",
             message: "What is the manager's ID number?",
             validate: idInput => {
                 if (idInput) {
@@ -42,7 +43,7 @@ const managerQuestion = () => {
           },
           {
             type: "input",
-            name: "email",
+            name: "managerEmail",
             message: "What is the manager's email address?",
             validate: emailInput => {
                 if (emailInput) {
@@ -65,7 +66,6 @@ const managerQuestion = () => {
       }
     }
     ])
-    .then(addMore)
     };
 
 const addMore = () => {
@@ -76,14 +76,15 @@ const addMore = () => {
       message: "Add more team members?",
       default: false,
     })
-    .then((data)=>{
-        if(data.moreEmployee){
-            console.log(data.moreEmployee);
-            inquireInfo();
-        }else{
-            return false;
-        }
-    })
+    .then(inquireInfo)
+        // (data)=>{
+        // if(data.moreEmployee){
+        //     console.log(data.moreEmployee);
+        //     inquireInfo();
+        // }else{
+        //     return false;
+        // }
+     .then(employeeRole)
     .then((data) => {
       switch (data.employeeType) {
         case "Engineer":
@@ -93,9 +94,6 @@ const addMore = () => {
           internQuestion();
           break;
       }
-    })
-    .then((data) => {
-      information.push(data);
     })
 };
 const internQuestion = () => {
@@ -178,30 +176,50 @@ const inquireInfo = () => {
               console.log("Enter employee's email address!");
           }
       }
-    },
+    }
   ])
-  .then(employeeRole)
-  .then(data => {
-    switch (data.employeeType) {
-       case 'Engineer':
-       engineerQuestion();
-       break;
-       case 'Intern':
-       internQuestion();
-       break;
-       }
-    })
-.then(data => {
-    information.push(data);
-})
-.then(addMore)
+//   .then(employeeRole)
+//   .then(data => {
+//     switch (data.employeeType) {
+//        case 'Engineer':
+//        engineerQuestion();
+//        break;
+//        case 'Intern':
+//        internQuestion();
+//        break;
+//        }
+//     })
+// .then(data => {
+//     information.push(data);
+// })
 };
 
+const makeFile = fileContent => {
+    return new Promise((resolve, reject) => {
+        fs.writeFile('../dist/.index.html',fileContent,err =>{
+        if (err) {
+          reject(err);
+          return;
+        }
 
-const companyPrompt = () => {
-    managerQuestion()
-    .then(addMore)
+        resolve({
+           ok: true,
+          message: 'File created!'
+        });
+    });
+  });
 };
 
-companyPrompt();
+managerQuestion()
+.then(addMore);
+// .then(data =>{
+//     return template(data);
+// })
+// .then(content => {
+//     console.log(content);
+//     makeFile(content);
+// })
+// .catch(err => {
+//     console.log(err);
+//   });
 
