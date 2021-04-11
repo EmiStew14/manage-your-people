@@ -7,9 +7,9 @@ const Intern = require("./lib/Intern");
 const template = require('./src/template');
 
 const information = [];
+const newEmployee = {};
 
 const managerQuestion = () => {
-    console.log("Hi boss");
     return inquirer.prompt([
         {
           type: "confirm",
@@ -76,7 +76,29 @@ const addMore = () => {
       message: "Add more team members?",
       default: false,
     })
-    .then(inquireInfo)
+    .then(data =>{
+            if (data.moreEmployee == true) {
+                
+                inquireInfo()
+                .then(data => {
+                    newEmployee.name = data.name;
+                    newEmployee.id = data.id;
+                    newEmployee.email = data.email;
+
+                  switch (data.employeeType) {
+                    case "Engineer":
+                      engineerQuestion();
+                      break;
+                    case "Intern":
+                      internQuestion();
+                      break;
+                  }
+                })
+            }else{
+                return makeFile(information);
+            }
+        }
+        )
         // (data)=>{
         // if(data.moreEmployee){
         //     console.log(data.moreEmployee);
@@ -84,59 +106,62 @@ const addMore = () => {
         // }else{
         //     return false;
         // }
-     .then(employeeRole)
-    .then((data) => {
-      switch (data.employeeType) {
-        case "Engineer":
-          engineerQuestion();
-          break;
-        case "Intern":
-          internQuestion();
-          break;
-      }
-    })
 };
 const internQuestion = () => {
   console.log("Hi newbie");
-  return inquirer.prompt({
+  return inquirer
+  .prompt({
     type: "input",
     name: "school",
     message: "What school does this person attend?",
-    validate: (schoolInput) => {
-      if (schoolInput) {
-        return true;
-      } else {
-        console.log("Enter the school name!");
-      }
-    },
-  });
+    // validate: (schoolInput) => {
+    //   if (schoolInput) {
+    //     return true;
+    //   } else {
+    //     console.log("Enter the school name!");
+    //   }
+    // },
+  })
+  .then( answers => {
+        const newIntern = new Intern(newEmployee.name, newEmployee.id,newEmployee.email,answers.school)
+        information.push(newIntern);
+        console.log(information);
+        addMore();
+  })
 };
 const engineerQuestion = () => {
   console.log("Hi coder");
   return inquirer.prompt({
     type: "input",
-    name: "github",
+    name: "gitHub",
     message: "Input Engineer's github username",
-    validate: (githubInput) => {
-      if (githubInput) {
-        return true;
-      } else {
-        console.log("Enter the github username!");
-      }
-    },
-  });
+//     validate: (githubInput) => {
+//       if (githubInput) {
+//         return true;
+//       } else {
+//         console.log("Enter the github username!");
+//       }
+//     }
+  })
+  .then(answers => {
+        const newEngineer = new Engineer(newEmployee.name, newEmployee.id,newEmployee.email,answers.gitHub)
+        information.push(newEngineer);
+        console.log(information);
+        addMore();
+  })
 };
-const employeeRole = () =>{
-    return inquirer
-    .prompt(
-        {
-            type: "list",
-            name: "employeeType",
-            message: "What type of employee are they?",
-            choices: ["Engineer", "Intern"],
-          }
-    )
-};
+// const employeeRole = () =>{
+//     return inquirer
+//     .prompt(
+//         {
+//             type: "list",
+//             name: "employeeType",
+//             message: "What type of employee are they?",
+//             choices: ["Engineer", "Intern"],
+//           }
+//     )
+// };
+    
 const inquireInfo = () => {
   console.log("build the info");
   return inquirer
@@ -176,7 +201,13 @@ const inquireInfo = () => {
               console.log("Enter employee's email address!");
           }
       }
-    }
+    },
+    {
+        type: "list",
+        name: "employeeType",
+        message: "What type of employee are they?",
+        choices: ["Engineer", "Intern"],
+      }
   ])
 //   .then(employeeRole)
 //   .then(data => {
@@ -194,32 +225,31 @@ const inquireInfo = () => {
 // })
 };
 
-const makeFile = fileContent => {
-    return new Promise((resolve, reject) => {
-        fs.writeFile('../dist/.index.html',fileContent,err =>{
-        if (err) {
-          reject(err);
-          return;
-        }
-
-        resolve({
-           ok: true,
-          message: 'File created!'
-        });
-    });
-  });
+const makeFile = (information) => {
+        fs.writeFile('./dist/index.html',template(information), err =>{
+        if (err) throw err;
+          console.log("File created");
+        })
 };
 
 managerQuestion()
-.then(addMore);
-// .then(data =>{
-//     return template(data);
+.then(answers => {
+    console.log(answers);
+     const manager = new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.office);
+     information.push(manager);
+     console.log(information);
+     addMore();
+    })
+
+// .then(information =>{
+//     console.log(information);
+//     return template(information);
 // })
-// .then(content => {
-//     console.log(content);
-//     makeFile(content);
+// .then(data => {
+// console.log("line 249");
+//     makeFile(data);
 // })
-// .catch(err => {
-//     console.log(err);
-//   });
+.catch(err => {
+    console.log(err);
+  });
 

@@ -1,64 +1,98 @@
 const fs = require('fs');
+const Engineer = require('../lib/Engineer');
+const Intern = require('../lib/Intern');
+const Manager = require('../lib/Manager');
 
-const managerCard = (data) => {
+const managerCard = information => {
     return `
       <div class="card border-warning mb-3" style="max-width: 18rem;">
+      ${information
+        .filter(({Manager}) => Manager)
+        .map(({managerName, managerId, managerEmail, office}) =>{
+            return `
           <div class="card-header text-white bg-dark col-3">
-            <span class="text-bold">${data.managerName}</span>
+            <span class="text-bold">${managerName}</span>
           </br>
             <span class="text-bold">Manager</span>
           <div class="card-body text-white bg-dark d-flex row">
               <ul class="align-items-start col-auto">
-                  <li><span class="text-bold">${data.managerId}</span></li>
-                  <li><span class="text-bold">${data.managerEmail}</span></li>
-                  <li><span class="text-bold">${data.office}</span></li>
+                  <li><span class="text-bold">${managerId}</span></li>
+                  <li><span class="text-bold">${managerEmail}</span></li>
+                  <li><span class="text-bold">${office}</span></li>
               </ul>
           </div>
           </div>
+          `;})
+          .join('')}
           </div>
       `;
   };
   
-  const employeeCard = (data) => {
-    if (data.employeeType == "Intern") {
-      return `
+  const internCard = newIntern => {
+      console.log(newIntern);
+        return `
     <div class="card border-success mb-3" style="max-width: 18rem;">
+    ${information
+        .filter(({Intern}) => Intern)
+        .map(({name, id, email, school}) =>{
+            return `
     <div class="card-header text-white bg-dark col-3">
-      <span class="text-bold">${data.name}</span>
+      <span class="text-bold">${name}</span>
     </br>
-      <span class="text-bold">${data.employeeType}</span>
+      <span class="text-bold">Intern</span>
     <div class="card-body text-white bg-dark d-flex row">
         <ul class="align-items-start col-auto">
-            <li><span class="text-bold">${data.id}</span></li>
-            <li><a target="_blank" href="${data.email}></a></li>
-            <li><span class="text-bold">${data.school}</span></li>
+            <li><span class="text-bold">${id}</span></li>
+            <li><a target="_blank" href="${email}></a></li>
+            <li><span class="text-bold">${school}</span></li>
         </ul>
     </div>
     </div>
+    `;})
+          .join('')}
   </div>
     `;
-    }
-    if (data.employeeType == "Engineer") {
+};
+  const engineerCard = newEngineer => {
+      console.log(newEngineer);
       return `
     <div class="card border-warning mb-3" style="max-width: 18rem;">
+    ${information
+        .filter(({Engineer}) => Engineer)
+        .map(({name, id, email, gitHub}) =>{
+            return `
     <div class="card-header text-white bg-dark col-3">
-      <span class="text-bold">${data.name}</span>
+      <span class="text-bold">${name}</span>
     </br>
-      <span class="text-bold">${data.employeeType}</span>
+      <span class="text-bold">Engineer</span>
     <div class="card-body text-white bg-dark d-flex row">
         <ul class="align-items-start col-auto">
-            <li><span class="text-bold">${data.id}</span></li>
-            <li><a target="_blank" href="${data.email}></a></li>
-            <li><a target="_blank" href="https://github.com/${data.github}"></a></li>
+            <li><span class="text-bold">${id}</span></li>
+            <li><a target="_blank" href="${email}></a></li>
+            <li><a target="_blank" href="https://github.com/${gitHub}"></a></li>
         </ul>
     </div>
     </div>
+    `;})
+    .join('')}
   </div>
     `;
-    }
   };
   
-  const template= (data) => {
+  const employeeCard = (information) => {
+
+      information.forEach(data => {
+
+        if (data.employeeType == 'Intern'){
+            return internCard();
+        }
+        if (data.employeeType == 'Engineer') {
+            return engineerCard();
+        }
+      });
+  }
+  module.exports = templateData  => {
+      const information = templateData;
     return `
     <!DOCTYPE html>
     <html lang="en">
@@ -77,8 +111,8 @@ const managerCard = (data) => {
             </header>
     
             <div class="card-columns row text-center align-items-center p-3">
-            ${managerCard}
-            ${employeeCard}
+            ${managerCard(information)}
+            ${employeeCard(information)}
   
             </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -86,6 +120,5 @@ const managerCard = (data) => {
     
     </html>
     `;
-  };
-  module.exports = template;
+};
   
