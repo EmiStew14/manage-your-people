@@ -114,13 +114,13 @@ const internQuestion = () => {
     type: "input",
     name: "school",
     message: "What school does this person attend?",
-    // validate: (schoolInput) => {
-    //   if (schoolInput) {
-    //     return true;
-    //   } else {
-    //     console.log("Enter the school name!");
-    //   }
-    // },
+    validate: (schoolInput) => {
+      if (schoolInput) {
+        return true;
+      } else {
+        console.log("Enter the school name!");
+      }
+    },
   })
   .then( answers => {
         const newIntern = new Intern(newEmployee.name, newEmployee.id,newEmployee.email,answers.school)
@@ -135,13 +135,13 @@ const engineerQuestion = () => {
     type: "input",
     name: "gitHub",
     message: "Input Engineer's github username",
-//     validate: (githubInput) => {
-//       if (githubInput) {
-//         return true;
-//       } else {
-//         console.log("Enter the github username!");
-//       }
-//     }
+    validate: (githubInput) => {
+      if (githubInput) {
+        return true;
+      } else {
+        console.log("Enter the github username!");
+      }
+    }
   })
   .then(answers => {
         const newEngineer = new Engineer(newEmployee.name, newEmployee.id,newEmployee.email,answers.gitHub)

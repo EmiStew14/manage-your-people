@@ -11,15 +11,15 @@ const managerCard = information => {
         .filter((employee) => {return employee instanceof Manager})
         .map(({name, id, email, office}) =>{
             return `
-          <div class="card-header text-white bg-dark col-3">
+          <div class="card-header text-white bg-dark col-auto">
             <span class="text-bold">${name}</span>
           </br>
             <span class="text-bold">Manager</span>
           <div class="card-body text-white bg-dark d-flex row">
               <ul class="align-items-start col-auto">
-                  <li><span class="text-bold">${id}</span></li>
-                  <li><span class="text-bold">${email}</span></li>
-                  <li><span class="text-bold">${office}</span></li>
+                  <li>ID: <span class="text-bold">${id}</span></li>
+                  <li>Email: <a target="_blank" href="${email}">${email}</a></li>
+                  <li>Office Number: <span class="text-bold">${office}</span></li>
               </ul>
           </div>
           </div>
@@ -29,68 +29,59 @@ const managerCard = information => {
       `;
   };
   
-  const internCard = information => {
+  const internCard = Intern => {
+      console.log(Intern);
         return `
     <div class="card border-success mb-3" style="max-width: 18rem;">
-    ${information
-        .filter((newIntern) => {return newIntern instanceof Intern})
-        .map(({name, id, email, school}) =>{
-            return `
-    <div class="card-header text-white bg-dark col-3">
-      <span class="text-bold">${name}</span>
+    <div class="card-header text-white bg-dark col-auto">
+      <span class="text-bold">${Intern.name}</span>
     </br>
       <span class="text-bold">Intern</span>
     <div class="card-body text-white bg-dark d-flex row">
         <ul class="align-items-start col-auto">
-            <li><span class="text-bold">${id}</span></li>
-            <li><a target="_blank" href="${email}></a></li>
-            <li><span class="text-bold">${school}</span></li>
+            <li>ID: <span class="text-bold">${Intern.id}</span></li>
+            <li>Email: <a target="_blank" href="${Intern.email}">${Intern.email}</a></li>
+            <li>School: <span class="text-bold">${Intern.school}</span></li>
         </ul>
     </div>
     </div>
-    `;})
-          .join('')}
   </div>
     `;
-};
-  const engineerCard = newEngineer => {
-      console.log(newEngineer);
+}
+  const engineerCard = Engineer => {
+      console.log(Engineer);
       return `
     <div class="card border-warning mb-3" style="max-width: 18rem;">
-    ${information
-        .filter(Engineer)
-        .map(({name, id, email, gitHub}) =>{
-            return `
-    <div class="card-header text-white bg-dark col-3">
-      <span class="text-bold">${name}</span>
+    <div class="card-header text-white bg-dark col-auto">
+      <span class="text-bold">${Engineer.name}</span>
     </br>
       <span class="text-bold">Engineer</span>
     <div class="card-body text-white bg-dark d-flex row">
         <ul class="align-items-start col-auto">
-            <li><span class="text-bold">${id}</span></li>
-            <li><a target="_blank" href="${email}></a></li>
-            <li><a target="_blank" href="https://github.com/${gitHub}"></a></li>
+            <li>ID: <span class="text-bold">${Engineer.id}</span></li>
+            <li>Email: <a target="_blank" href="${Engineer.email}">${Engineer.email}</a></li>
+            <li>Github: <a target="_blank" href="https://github.com/${Engineer.gitHub}">${Engineer.gitHub}</a></li>
         </ul>
     </div>
     </div>
-    `;})
-    .join('')}
   </div>
     `;
   };
-  
-  const employeeCard = (information) => {
-
-      information.forEach(data => {
-
-        if (data.employeeType == 'Intern'){
-            return internCard();
-        }
-        if (data.employeeType == 'Engineer') {
-            return engineerCard();
-        }
-      });
+  const createNew = (information) => {
+    employeeCard(information);
   }
+  let cards = '';
+  const employeeCard = (information) => {
+      for (let i = 1; i < information.length; i++) {
+        if (information[i].getRole() == 'Intern'){
+             cards+= internCard(information[i]);
+        }
+        if (information[i].getRole() == 'Engineer') {
+            cards+= engineerCard(information[i]);
+        }
+      }
+      return cards;
+  };
   module.exports = templateData  => {
       const information = templateData;
     return `
@@ -112,6 +103,7 @@ const managerCard = information => {
     
             <div class="card-columns row text-center align-items-center p-3">
             ${managerCard(information)}
+            </br>
             ${employeeCard(information)}
   
             </div>
