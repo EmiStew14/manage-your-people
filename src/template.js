@@ -1,4 +1,5 @@
 const fs = require('fs');
+const Employee = require('../lib/Employee');
 const Engineer = require('../lib/Engineer');
 const Intern = require('../lib/Intern');
 const Manager = require('../lib/Manager');
@@ -7,17 +8,17 @@ const managerCard = information => {
     return `
       <div class="card border-warning mb-3" style="max-width: 18rem;">
       ${information
-        .filter(({Manager}) => Manager)
-        .map(({managerName, managerId, managerEmail, office}) =>{
+        .filter((employee) => {return employee instanceof Manager})
+        .map(({name, id, email, office}) =>{
             return `
           <div class="card-header text-white bg-dark col-3">
-            <span class="text-bold">${managerName}</span>
+            <span class="text-bold">${name}</span>
           </br>
             <span class="text-bold">Manager</span>
           <div class="card-body text-white bg-dark d-flex row">
               <ul class="align-items-start col-auto">
-                  <li><span class="text-bold">${managerId}</span></li>
-                  <li><span class="text-bold">${managerEmail}</span></li>
+                  <li><span class="text-bold">${id}</span></li>
+                  <li><span class="text-bold">${email}</span></li>
                   <li><span class="text-bold">${office}</span></li>
               </ul>
           </div>
@@ -28,12 +29,11 @@ const managerCard = information => {
       `;
   };
   
-  const internCard = newIntern => {
-      console.log(newIntern);
+  const internCard = information => {
         return `
     <div class="card border-success mb-3" style="max-width: 18rem;">
     ${information
-        .filter(({Intern}) => Intern)
+        .filter((newIntern) => {return newIntern instanceof Intern})
         .map(({name, id, email, school}) =>{
             return `
     <div class="card-header text-white bg-dark col-3">
@@ -58,7 +58,7 @@ const managerCard = information => {
       return `
     <div class="card border-warning mb-3" style="max-width: 18rem;">
     ${information
-        .filter(({Engineer}) => Engineer)
+        .filter(Engineer)
         .map(({name, id, email, gitHub}) =>{
             return `
     <div class="card-header text-white bg-dark col-3">
