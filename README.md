@@ -30,6 +30,8 @@
   > npm install jest
 
   ## Usage:
+  ( https://drive.google.com/file/d/1Pe_WtHCyDxqUn6-7qlK90EMVHjG3TA3Y/view )
+  
     Answer prompts with Employee specific information and a HTML file will render with x amount of employee cards plus one manager card on your teams roster.
 
   ## Credits:
